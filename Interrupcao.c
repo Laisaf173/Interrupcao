@@ -59,12 +59,6 @@ int main() {
     inicializar_hardware();
     definir_leds_digito(padroes_digitos[numero], 255, 0, 255);
 
-    ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, IS_RGBW);
-
-    // Configuração das interrupções dos botões
-    gpio_set_irq_enabled_with_callback(botao_A, GPIO_IRQ_EDGE_FALL, true, &controle_interrupcao_gpio);
-    gpio_set_irq_enabled_with_callback(botao_B, GPIO_IRQ_EDGE_FALL, true, &controle_interrupcao_gpio);
-
     while (true) {
         gpio_put(pinoLedVermelho, true);
         sleep_ms(100);
@@ -96,6 +90,12 @@ void inicializar_hardware() {
     // Configuração do PIO para controlar os LEDs
     sm = pio_claim_unused_sm(pio, true);
     offset = pio_add_program(pio, &ws2812_program);
+    ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, IS_RGBW);
+
+    // Configuração das interrupções dos botões
+    gpio_set_irq_enabled_with_callback(botao_A, GPIO_IRQ_EDGE_FALL, true, &controle_interrupcao_gpio);
+    gpio_set_irq_enabled_with_callback(botao_B, GPIO_IRQ_EDGE_FALL, true, &controle_interrupcao_gpio);
+
    
 }
 
